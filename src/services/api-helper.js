@@ -5,19 +5,21 @@ const api = axios.create({
   baseURL: baseUrl
 });
 
- const price = async () => {
+const headers = {
+  'Content-Type': 'application/json'
+};
+
+const price = async () => {
   const resp = await api.get()
-  return resp.data.fast
- };
- 
- const comparePrice = async (etheriumPrice, usersPrice, chatId) => {
-  console.log('here',etheriumPrice, usersPrice, chatId)
-  if (etheriumPrice <= usersPrice) {
+  return resp.data.gasPriceRange[4]
+};
+
+
+const comparePrice = async (usersPrice, chatId) => {
     try {
-    await axios.post(`${process.env.TEXTAPI}${chatId}&text=The etherium gas price is now below your target price of ${usersPrice}\nThank you for using our service.\nUse /watchprice command to enter a new price.`)
+    await axios.post(`${process.env.TEXTAPI}${chatId}&text=The etherium gas price is now below your target price of ${usersPrice}\nThank you for using our service.\nUse /watchprice command to enter a new price.`, {headers : headers})
   } catch (err) {
       console.log(err)
-    }
   };
 };
 
